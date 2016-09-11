@@ -23,6 +23,7 @@ void loop() {
     testChaser();
 }
 
+// Send a single red chaser along the of the path physical LED data circuit:
 void testChaser() {
     for (int i = 0; i < NUM_LEDS; i++) {
         leds[i] = CRGB::Red;
