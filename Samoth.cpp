@@ -8,6 +8,9 @@
 
 // Software settings
 #define BRIGHTNESS         255
+#define FRAMES_PER_SECOND  120
+#define RAINBOW_CYCLER_MILLISECONDS  20
+#define PATTERN_CYCLER_SECONDS  5
 
 // Mapping constants
 #define TEMPLE_LENGTH   20
@@ -31,6 +34,13 @@ void setup() {
     delay(1000);
 }
 
+// List of patterns to cycle through.  Each is defined as a separate function below.
+typedef void (*SimplePatternList[])();
+SimplePatternList gPatterns = {rainbow, rainbowWithGlitter, sinelon, juggle, confetti, bpm};
+
+uint8_t gCurrentPatternNumber = 0; // Index number of which pattern is current
+uint8_t gHue = 0; // rotating "base color" used by many of the patterns
+
 void loop() {
     // testRightTemple();
     // delay(500);
@@ -44,10 +54,24 @@ void loop() {
     // testMirrorTemple();
     // testMirrorForehead();
 
-    symmetricalChaser();
-    FastLED.show();
+    // symmetricalChaser();
+    // FastLED.show();
     //delay(25);
+
+    // Call the current pattern function once, updating the 'leds' array
+    gPatterns[gCurrentPatternNumber]();
+
+    // send the 'leds' array out to the actual LED strip
+    FastLED.show();
+    // insert a delay to keep the framerate modest
+    FastLED.delay(1000/FRAMES_PER_SECOND);
+
+    // do some periodic updates
+    EVERY_N_MILLISECONDS(RAINBOW_CYCLER_MILLISECONDS) { gHue++; } // slowly cycle the "base color" through the rainbow
+    EVERY_N_SECONDS(PATTERN_CYCLER_SECONDS) { nextPattern(); } // change patterns periodically
 }
+
+// Animation functions
 
 // Send a single red chaser along the path of the physical LED data circuit
 void testChaser() {
@@ -127,10 +151,10 @@ void symmetricalChaser() {
 
 // Utility Functions
 void mirrorRightSideToLeft() {
-    for (uint8_t i = 0; i < TEMPLE_LENGTH; i++) {
-        leds[leftTemple[i]] = leds[rightTemple[i]];
-        if (i < FOREHEAD_LENGTH) {
-            leds[leftForehead[i]] = leds[rightForehead[i]];
+    for (uint8_t i = 0; i < FOREHEAD_LENGTH; i++) {
+        leds[leftForehead[i]] = leds[rightForehead[i]];
+        if (i < 9) {
+            leds[leftTemple[i]] = leds[rightTemple[i]];
         }
     }
 }
