@@ -11,10 +11,10 @@
 #define BRIGHTNESS         255
 #define FRAMES_PER_SECOND  120
 #define RAINBOW_CYCLER_MILLISECONDS  20
-#define PATTERN_CYCLER_SECONDS  5
+#define PATTERN_CYCLER_SECONDS  10
 
+// Utility function
 #define ARRAY_SIZE(A) (sizeof(A) / sizeof((A)[0]))
-
 
 // Mapping constants
 #define TEMPLE_LENGTH   20
@@ -40,7 +40,7 @@ void setup() {
 
 // List of patterns to cycle through.  Each is defined as a separate function below.
 typedef void (*SimplePatternList[])();
-SimplePatternList gPatterns = { addGlitterAdd,rainbowGlitter};
+SimplePatternList gPatterns = {confetti, sinelon, juggle, bpm, addGlitterAdd, rainbowGlitter, rainbow, rainbowWithGlitter};
 
 uint8_t gCurrentPatternNumber = 0; // Index number of which pattern is current
 uint8_t gHue = 0; // rotating "base color" used by many of the patterns
@@ -153,14 +153,8 @@ void symmetricalChaser() {
     fullMirror();
 }
 
-void nextPattern()
-{
-  // add one to the current pattern number, and wrap around at the end
-  gCurrentPatternNumber = (gCurrentPatternNumber + 1) % ARRAY_SIZE( gPatterns);
-}
 
-void rainbow()
-{
+void rainbow()  {
     // FastLED's built-in rainbow generator
     CRGB temple[TEMPLE_LENGTH];
     CRGB forehead[FOREHEAD_LENGTH];
@@ -175,39 +169,84 @@ void rainbow()
     fullMirror();
 }
 
-void rainbowWithGlitter()
-{
-  // built-in FastLED rainbow, plus some random sparkly glitter
-  rainbow();
-  addGlitter(80);
+void rainbowWithGlitter()   {
+    // built-in FastLED rainbow, plus some random sparkly glitter
+    rainbow();
+    addGlitter(80);
 }
 
-void addGlitter( fract8 chanceOfGlitter)
-{
-  if( random8() < chanceOfGlitter) {
-    leds[ random16(NUM_LEDS) ] += CRGB::White;
-  }
+void addGlitter(fract8 chanceOfGlitter) {
+    if(random8() < chanceOfGlitter) {
+    leds[random16(NUM_LEDS)] += CRGB::White;
+    }
 }
-
 
 void addGlitterAdd()
 {
-   fadeToBlackBy(leds, NUM_LEDS, 50);
-  addGlitter(80);
-   leds[ random16(NUM_LEDS) ] += CRGB::White;
-   delay(15);
-
+    fadeToBlackBy(leds, NUM_LEDS, 50);
+    leds[random16(NUM_LEDS)] += CRGB::White;
+    delay(15);
 }
 
 void rainbowGlitter()
 {
-  CRGB onePix[1];
-  delay(15);
-  fill_rainbow (onePix, 1, gHue, 7);
-  leds[ random16(NUM_LEDS) ] = onePix[0];
-   fadeToBlackBy(leds, NUM_LEDS, 50);
+    CRGB onePix[1];
+    fill_rainbow (onePix, 1, gHue, 7);
+    leds[random16(NUM_LEDS)] = onePix[0];
+    fadeToBlackBy(leds, NUM_LEDS, 50);
+    delay(15);
 }
 
+void confetti()
+{
+    // random colored speckles that blink in and fade smoothly
+    fadeToBlackBy(leds, NUM_LEDS, 10);
+    uint8_t templePosition = random16(TEMPLE_LENGTH);
+    uint8_t foreheadPosition = random16(FOREHEAD_LENGTH);
+    leds[rightTemple[templePosition]] += CHSV(gHue + random8(64), 200, 255);
+    leds[rightForehead[foreheadPosition]] += CHSV(gHue + random8(64), 200, 255);
+    fullMirror();
+}
+
+void sinelon()
+{
+    // a colored dot sweeping back and forth, with fading trails
+    fadeToBlackBy(leds, NUM_LEDS, 20);
+    uint8_t templePosition = beatsin16(13, 0, TEMPLE_LENGTH);
+    uint8_t foreheadPosition = beatsin16(13, 0, FOREHEAD_LENGTH);
+    leds[rightTemple[templePosition]] += CHSV(gHue, 255, 192);
+    leds[rightForehead[foreheadPosition]] += CHSV(gHue, 255, 192);
+    fullMirror();
+}
+
+void bpm()
+{
+    // colored stripes pulsing at a defined Beats-Per-Minute (BPM)
+    uint8_t BeatsPerMinute = 62;
+    CRGBPalette16 palette = PartyColors_p;
+    uint8_t beat = beatsin8(BeatsPerMinute, 64, 255);
+    for (uint8_t i = 0; i < TEMPLE_LENGTH; i++) {
+        leds[rightTemple[i]] = ColorFromPalette(palette, gHue+(i*2), beat-gHue+(i*10));
+        if (i < FOREHEAD_LENGTH) {
+            leds[rightForehead[i]] = ColorFromPalette(palette, gHue+(i*2), beat-gHue+(i*10));
+        }
+    }
+    fullMirror();
+}
+
+void juggle() {
+    // eight colored dots, weaving in and out of sync with each other
+    fadeToBlackBy(leds, NUM_LEDS, 20);
+    byte dothue = 0;
+    for (int i = 0; i < 8; i++) {
+        uint8_t templePosition = beatsin16(i + 7, 0, TEMPLE_LENGTH);
+        uint8_t foreheadPosition = beatsin16(i + 7, 0, FOREHEAD_LENGTH);
+        leds[rightTemple[templePosition]] |= CHSV(dothue, 200, 255);
+        leds[rightForehead[foreheadPosition]] |= CHSV(dothue, 200, 255);
+        dothue += 32;
+    }
+    fullMirror();
+}
 
 // Utility Functions
 void mirrorRightSideToLeft() {
@@ -243,4 +282,10 @@ void fullMirror() {
     mirrorRightFrontCrownToRear();
     mirrorRightSideToLeft();
     mirrorLeftFrontCrownToRear();
+}
+
+void nextPattern()
+{
+  // add one to the current pattern number, and wrap around at the end
+  gCurrentPatternNumber = (gCurrentPatternNumber + 1) % ARRAY_SIZE( gPatterns);
 }
