@@ -27,6 +27,8 @@ void setup() {
     // tell FastLED about the LED strip configuration
     FastLED.addLeds<LED_TYPE,DATA_PIN,COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
     FastLED.setBrightness(BRIGHTNESS);
+    FastLED.clear();
+    delay(1000);
 }
 
 void loop() {
@@ -39,9 +41,7 @@ void loop() {
     // testLeftForehead();
     // delay(500);
     testMirrorTemple();
-    delay(500);
     testMirrorForehead();
-    delay(500);
 }
 
 // Send a single red chaser along the path of the physical LED data circuit
@@ -49,7 +49,7 @@ void testChaser() {
     for (uint8_t i = 0; i < NUM_LEDS; i++) {
         leds[i] = CRGB::Red;
         FastLED.show();
-        delay(20);
+        delay(10);
         FastLED.clear();
     }
 }
@@ -58,7 +58,7 @@ void testRightTemple() {
     for (uint8_t i = 0; i < TEMPLE_LENGTH; i++) {
         leds[rightTemple[i]] = CRGB::Red;
         FastLED.show();
-        delay(20);
+        delay(10);
         FastLED.clear();
     }
 }
@@ -68,7 +68,7 @@ void testRightForehead() {
         leds[rightForehead[i]] = CRGB::Blue;
         mirrorRightFrontCrownToRear();
         FastLED.show();
-        delay(20);
+        delay(10);
         FastLED.clear();
     }
 }
@@ -77,7 +77,7 @@ void testLeftTemple() {
     for (uint8_t i = 0; i < TEMPLE_LENGTH; i++) {
         leds[leftTemple[i]] = CRGB::Green;
         FastLED.show();
-        delay(20);
+        delay(10);
         FastLED.clear();
     }
 }
@@ -86,7 +86,7 @@ void testLeftForehead() {
     for (uint8_t i = 0; i < FOREHEAD_LENGTH; i++) {
         leds[leftForehead[i]] = CRGB::Yellow;
         FastLED.show();
-        delay(20);
+        delay(10);
         FastLED.clear();
     }
 }
@@ -96,8 +96,8 @@ void testMirrorTemple() {
         leds[rightTemple[i]] = CRGB::Red;
         mirrorRightSideToLeft();
         FastLED.show();
-        delay(20);
-        fadeToBlackBy(leds, NUM_LEDS, 20);
+        delay(10);
+        fadeToBlackBy(leds, NUM_LEDS, 60);
     }
 }
 
@@ -106,8 +106,8 @@ void testMirrorForehead() {
         leds[rightForehead[i]] = CRGB::Blue;
         fullMirror();
         FastLED.show();
-        delay(20);
-        fadeToBlackBy(leds, NUM_LEDS, 20);
+        delay(10);
+        fadeToBlackBy(leds, NUM_LEDS, 60);
     }
 }
 
@@ -152,7 +152,7 @@ void mirrorLeftFrontCrownToRear() {
 }
 
 void fullMirror() {
-    mirrorLeftFrontCrownToRear();
+    mirrorRightFrontCrownToRear();
     mirrorRightSideToLeft();
     mirrorLeftFrontCrownToRear();
 }
