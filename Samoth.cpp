@@ -31,13 +31,13 @@ void setup() {
 
 void loop() {
     testRightTemple();
-    delay(3000);
+    delay(500);
     testRightForehead();
-    delay(3000);
+    delay(500);
     testLeftTemple();
-    delay(3000);
+    delay(500);
     testLeftForehead();
-    delay(3000);
+    delay(500);
 }
 
 // Send a single red chaser along the path of the physical LED data circuit
@@ -45,7 +45,7 @@ void testChaser() {
     for (uint8_t i = 0; i < NUM_LEDS; i++) {
         leds[i] = CRGB::Red;
         FastLED.show();
-        delay(100);
+        delay(20);
         FastLED.clear();
     }
 }
@@ -54,7 +54,7 @@ void testRightTemple() {
     for (uint8_t i = 0; i < TEMPLE_LENGTH; i++) {
         leds[rightTemple[i]] = CRGB::Red;
         FastLED.show();
-        delay(100);
+        delay(20);
         FastLED.clear();
     }
 }
@@ -62,8 +62,9 @@ void testRightTemple() {
 void testRightForehead() {
     for (uint8_t i = 0; i < FOREHEAD_LENGTH; i++) {
         leds[rightForehead[i]] = CRGB::Blue;
+        mirrorRightFrontCrownToRear();
         FastLED.show();
-        delay(100);
+        delay(20);
         FastLED.clear();
     }
 }
@@ -72,7 +73,7 @@ void testLeftTemple() {
     for (uint8_t i = 0; i < TEMPLE_LENGTH; i++) {
         leds[leftTemple[i]] = CRGB::Green;
         FastLED.show();
-        delay(100);
+        delay(20);
         FastLED.clear();
     }
 }
@@ -81,7 +82,7 @@ void testLeftForehead() {
     for (uint8_t i = 0; i < FOREHEAD_LENGTH; i++) {
         leds[leftForehead[i]] = CRGB::Yellow;
         FastLED.show();
-        delay(100);
+        delay(20);
         FastLED.clear();
     }
 }
