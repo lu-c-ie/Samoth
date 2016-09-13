@@ -6,11 +6,15 @@
 #define COLOR_ORDER GRB
 #define NUM_LEDS    73
 
+
 // Software settings
 #define BRIGHTNESS         255
 #define FRAMES_PER_SECOND  120
 #define RAINBOW_CYCLER_MILLISECONDS  20
 #define PATTERN_CYCLER_SECONDS  5
+
+#define ARRAY_SIZE(A) (sizeof(A) / sizeof((A)[0]))
+
 
 // Mapping constants
 #define TEMPLE_LENGTH   20
@@ -36,7 +40,7 @@ void setup() {
 
 // List of patterns to cycle through.  Each is defined as a separate function below.
 typedef void (*SimplePatternList[])();
-SimplePatternList gPatterns = {rainbow, rainbowWithGlitter, sinelon, juggle, confetti, bpm};
+SimplePatternList gPatterns = { addGlitterAdd,rainbowGlitter};
 
 uint8_t gCurrentPatternNumber = 0; // Index number of which pattern is current
 uint8_t gHue = 0; // rotating "base color" used by many of the patterns
@@ -149,6 +153,12 @@ void symmetricalChaser() {
     fullMirror();
 }
 
+void nextPattern()
+{
+  // add one to the current pattern number, and wrap around at the end
+  gCurrentPatternNumber = (gCurrentPatternNumber + 1) % ARRAY_SIZE( gPatterns);
+}
+
 void rainbow()
 {
     // FastLED's built-in rainbow generator
@@ -156,7 +166,7 @@ void rainbow()
     CRGB forehead[FOREHEAD_LENGTH];
     fill_rainbow(temple, TEMPLE_LENGTH, gHue, 7);
     fill_rainbow(forehead, FOREHEAD_LENGTH, gHue, 7);
-    for (uint8_t i = 0; i < TEMPLE_LENGTH) {
+    for (uint8_t i = 0; i < TEMPLE_LENGTH; i++) {
       leds[rightTemple[i]] = temple[i];
       if (i < FOREHEAD_LENGTH) {
           leds[rightForehead[i]] = forehead[i];
@@ -164,6 +174,40 @@ void rainbow()
     }
     fullMirror();
 }
+
+void rainbowWithGlitter()
+{
+  // built-in FastLED rainbow, plus some random sparkly glitter
+  rainbow();
+  addGlitter(80);
+}
+
+void addGlitter( fract8 chanceOfGlitter)
+{
+  if( random8() < chanceOfGlitter) {
+    leds[ random16(NUM_LEDS) ] += CRGB::White;
+  }
+}
+
+
+void addGlitterAdd()
+{
+   fadeToBlackBy(leds, NUM_LEDS, 50);
+  addGlitter(80);
+   leds[ random16(NUM_LEDS) ] += CRGB::White;
+   delay(15);
+
+}
+
+void rainbowGlitter()
+{
+  CRGB onePix[1];
+  delay(15);
+  fill_rainbow (onePix, 1, gHue, 7);
+  leds[ random16(NUM_LEDS) ] = onePix[0];
+   fadeToBlackBy(leds, NUM_LEDS, 50);
+}
+
 
 // Utility Functions
 void mirrorRightSideToLeft() {
