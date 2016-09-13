@@ -43,8 +43,10 @@ void loop() {
 
     // testMirrorTemple();
     // testMirrorForehead();
-    
+
     symmetricalChaser();
+    FastLED.show();
+    delay(25);
 }
 
 // Send a single red chaser along the path of the physical LED data circuit
