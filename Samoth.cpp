@@ -153,7 +153,7 @@ void rainbow()
 {
     // FastLED's built-in rainbow generator
     CRGB temple[TEMPLE_LENGTH];
-    CRBG forehead[FOREHEAD_LENGTH];
+    CRGB forehead[FOREHEAD_LENGTH];
     fill_rainbow(temple, TEMPLE_LENGTH, gHue, 7);
     fill_rainbow(forehead, FOREHEAD_LENGTH, gHue, 7);
     for (uint8_t i = 0; i < TEMPLE_LENGTH) {
