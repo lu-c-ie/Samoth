@@ -30,13 +30,17 @@ void setup() {
 }
 
 void loop() {
-    testRightTemple();
+    // testRightTemple();
+    // delay(500);
+    // testRightForehead();
+    // delay(500);
+    // testLeftTemple();
+    // delay(500);
+    // testLeftForehead();
+    // delay(500);
+    testMirrorTemple();
     delay(500);
-    testRightForehead();
-    delay(500);
-    testLeftTemple();
-    delay(500);
-    testLeftForehead();
+    testMirrorForehead();
     delay(500);
 }
 
@@ -72,6 +76,27 @@ void testRightForehead() {
 void testLeftTemple() {
     for (uint8_t i = 0; i < TEMPLE_LENGTH; i++) {
         leds[leftTemple[i]] = CRGB::Green;
+        FastLED.show();
+        delay(20);
+        FastLED.clear();
+    }
+}
+
+void testMirrorTemple() {
+    for (uint8_t i = 0; i < TEMPLE_LENGTH; i++) {
+        leds[rightTemple[i]] = CRGB::Red;
+        mirrorRightSideToLeft();
+        FastLED.show();
+        delay(20);
+        FastLED.clear();
+    }
+}
+
+void testMirrorForehead() {
+    for (uint8_t i = 0; i < FOREHEAD_LENGTH; i++) {
+        leds[rightForehead[i]] = CRGB::Blue;
+        mirrorRightFrontCrownToRear();
+        mirrorRightSideToLeft();
         FastLED.show();
         delay(20);
         FastLED.clear();
