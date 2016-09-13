@@ -6,7 +6,6 @@
 #define COLOR_ORDER GRB
 #define NUM_LEDS    73
 
-
 // Software settings
 #define BRIGHTNESS         255
 #define FRAMES_PER_SECOND  120
