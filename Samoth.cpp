@@ -117,7 +117,7 @@ void testMirrorForehead() {
 }
 
 void symmetricalChaser() {
-    fadeToBlackBy(leds, NUM_LEDS, 60);
+    fadeToBlackBy(leds, NUM_LEDS, 5);
     uint8_t templePosition = beatsin8(30, 0, TEMPLE_LENGTH);
     leds[rightTemple[templePosition]] = CRGB::Red;
     uint8_t foreheadPosition = beatsin8(20, 0, FOREHEAD_LENGTH);
