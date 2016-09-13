@@ -46,7 +46,7 @@ void loop() {
 
     symmetricalChaser();
     FastLED.show();
-    delay(25);
+    //delay(25);
 }
 
 // Send a single red chaser along the path of the physical LED data circuit
@@ -120,7 +120,7 @@ void symmetricalChaser() {
     fadeToBlackBy(leds, NUM_LEDS, 60);
     uint8_t templePosition = beatsin8(30, 0, TEMPLE_LENGTH);
     leds[rightTemple[templePosition]] = CRGB::Red;
-    uint8_t foreheadPosition = beatsin8(15, 0, FOREHEAD_LENGTH);
+    uint8_t foreheadPosition = beatsin8(20, 0, FOREHEAD_LENGTH);
     leds[rightForehead[foreheadPosition]] = CRGB::Blue;
     fullMirror();
 }
