@@ -149,6 +149,22 @@ void symmetricalChaser() {
     fullMirror();
 }
 
+void rainbow()
+{
+    // FastLED's built-in rainbow generator
+    CRGB temple[TEMPLE_LENGTH];
+    CRBG forehead[FOREHEAD_LENGTH];
+    fill_rainbow(temple, TEMPLE_LENGTH, gHue, 7);
+    fill_rainbow(forehead, FOREHEAD_LENGTH, gHue, 7);
+    for (uint8_t i = 0; i < TEMPLE_LENGTH) {
+      leds[rightTemple[i]] = temple[i];
+      if (i < FOREHEAD_LENGTH) {
+          leds[rightForehead[i]] = forehead[i];
+      }
+    }
+    fullMirror();
+}
+
 // Utility Functions
 void mirrorRightSideToLeft() {
     for (uint8_t i = 0; i < FOREHEAD_LENGTH; i++) {
