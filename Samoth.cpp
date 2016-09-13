@@ -40,8 +40,11 @@ void loop() {
     // delay(500);
     // testLeftForehead();
     // delay(500);
-    testMirrorTemple();
-    testMirrorForehead();
+
+    // testMirrorTemple();
+    // testMirrorForehead();
+    
+    symmetricalChaser();
 }
 
 // Send a single red chaser along the path of the physical LED data circuit
@@ -49,7 +52,7 @@ void testChaser() {
     for (uint8_t i = 0; i < NUM_LEDS; i++) {
         leds[i] = CRGB::Red;
         FastLED.show();
-        delay(10);
+        delay(25);
         FastLED.clear();
     }
 }
@@ -58,7 +61,7 @@ void testRightTemple() {
     for (uint8_t i = 0; i < TEMPLE_LENGTH; i++) {
         leds[rightTemple[i]] = CRGB::Red;
         FastLED.show();
-        delay(10);
+        delay(25);
         FastLED.clear();
     }
 }
@@ -68,7 +71,7 @@ void testRightForehead() {
         leds[rightForehead[i]] = CRGB::Blue;
         mirrorRightFrontCrownToRear();
         FastLED.show();
-        delay(10);
+        delay(25);
         FastLED.clear();
     }
 }
@@ -77,7 +80,7 @@ void testLeftTemple() {
     for (uint8_t i = 0; i < TEMPLE_LENGTH; i++) {
         leds[leftTemple[i]] = CRGB::Green;
         FastLED.show();
-        delay(10);
+        delay(25);
         FastLED.clear();
     }
 }
@@ -86,7 +89,7 @@ void testLeftForehead() {
     for (uint8_t i = 0; i < FOREHEAD_LENGTH; i++) {
         leds[leftForehead[i]] = CRGB::Yellow;
         FastLED.show();
-        delay(10);
+        delay(25);
         FastLED.clear();
     }
 }
@@ -96,7 +99,7 @@ void testMirrorTemple() {
         leds[rightTemple[i]] = CRGB::Red;
         mirrorRightSideToLeft();
         FastLED.show();
-        delay(10);
+        delay(25);
         fadeToBlackBy(leds, NUM_LEDS, 60);
     }
 }
@@ -106,19 +109,18 @@ void testMirrorForehead() {
         leds[rightForehead[i]] = CRGB::Blue;
         fullMirror();
         FastLED.show();
-        delay(10);
+        delay(25);
         fadeToBlackBy(leds, NUM_LEDS, 60);
     }
 }
 
 void symmetricalChaser() {
-    fadeToBlackBy(leds, NUM_LEDS, 20);
-    uint8_t templePosition = beatsin8(60, 0, TEMPLE_LENGTH);
+    fadeToBlackBy(leds, NUM_LEDS, 60);
+    uint8_t templePosition = beatsin8(30, 0, TEMPLE_LENGTH);
     leds[rightTemple[templePosition]] = CRGB::Red;
-    uint8_t foreheadPosition = beatsin8(30, 0, FOREHEAD_LENGTH);
+    uint8_t foreheadPosition = beatsin8(15, 0, FOREHEAD_LENGTH);
     leds[rightForehead[foreheadPosition]] = CRGB::Blue;
-    mirrorRightFrontCrownToRear();
-    mirrorRightSideToLeft();
+    fullMirror();
 }
 
 // Utility Functions
