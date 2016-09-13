@@ -82,33 +82,32 @@ void testLeftTemple() {
     }
 }
 
-void testMirrorTemple() {
-    for (uint8_t i = 0; i < TEMPLE_LENGTH; i++) {
-        leds[rightTemple[i]] = CRGB::Red;
-        mirrorRightSideToLeft();
-        FastLED.show();
-        delay(20);
-        FastLED.clear();
-    }
-}
-
-void testMirrorForehead() {
-    for (uint8_t i = 0; i < FOREHEAD_LENGTH; i++) {
-        leds[rightForehead[i]] = CRGB::Blue;
-        mirrorRightFrontCrownToRear();
-        mirrorRightSideToLeft();
-        FastLED.show();
-        delay(20);
-        FastLED.clear();
-    }
-}
-
 void testLeftForehead() {
     for (uint8_t i = 0; i < FOREHEAD_LENGTH; i++) {
         leds[leftForehead[i]] = CRGB::Yellow;
         FastLED.show();
         delay(20);
         FastLED.clear();
+    }
+}
+
+void testMirrorTemple() {
+    for (uint8_t i = 0; i < TEMPLE_LENGTH; i++) {
+        leds[rightTemple[i]] = CRGB::Red;
+        mirrorRightSideToLeft();
+        FastLED.show();
+        delay(20);
+        fadeToBlackBy(leds, NUM_LEDS, 20);
+    }
+}
+
+void testMirrorForehead() {
+    for (uint8_t i = 0; i < FOREHEAD_LENGTH; i++) {
+        leds[rightForehead[i]] = CRGB::Blue;
+        fullMirror();
+        FastLED.show();
+        delay(20);
+        fadeToBlackBy(leds, NUM_LEDS, 20);
     }
 }
 
@@ -140,4 +139,20 @@ void mirrorRightFrontCrownToRear() {
     leds[52] = leds[47];
     leds[51] = leds[48];
     leds[50] = leds[49];
+}
+
+void mirrorLeftFrontCrownToRear() {
+    leds[32] = leds[19];
+    leds[31] = leds[20];
+    leds[30] = leds[21];
+    leds[29] = leds[22];
+    leds[28] = leds[23];
+    leds[27] = leds[24];
+    leds[26] = leds[25];
+}
+
+void fullMirror() {
+    mirrorLeftFrontCrownToRear();
+    mirrorRightSideToLeft();
+    mirrorLeftFrontCrownToRear();
 }
