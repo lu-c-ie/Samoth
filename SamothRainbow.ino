@@ -1,3 +1,5 @@
+#ifdef INCLUDE_TESTER
+
 #include "FastLED.h"
 
 // Hardware definitions:
@@ -71,3 +73,5 @@ void addGlitter( fract8 chanceOfGlitter)
     leds[ random16(NUM_LEDS) ] += CRGB::White;
   }
 }
+
+#endif //INCLUDE_TESTER
