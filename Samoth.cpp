@@ -247,6 +247,11 @@ void juggle() {
     fullMirror();
 }
 
+
+
+
+
+
 // Utility Functions
 void mirrorRightSideToLeft() {
     for (uint8_t i = 0; i < FOREHEAD_LENGTH; i++) {
